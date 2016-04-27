@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <script src="swarm.js"></script>
+    <style>
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial;
+        font-weight: 300;
+        color: white;
+      }
+      #hud {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5em;
+      }
+      input {
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body onload="init()" style="margin:0;padding:0">
+    <canvas id="swarm-canvas" style="margin:0;padding:0"></canvas>
+    <div id="hud" style="position:absolute;top:30;right:30;text-align:right">
+      <div>Adhesion <input type="range" id="adhesion" value="80" min="0" max="100"></div>
+      <div>Cohesion <input type="range" id="cohesion" value="80" min="0" max="100"></div>
+      <div>Repulsion <input type="range" id="repulsion" value="33" min="0" max="100"></div>
+      <div>Turn speed <input type="range" id="turn-speed" value="33" min="0" max="100"></div>
+      <div>Flock size <input type="range" id="flock-size" value="30" min="2" max="100"></div>
+      <div>Follow red bird <input type="checkbox" id="follow-red" checked></div>
+      <br>
+      <div>'Space' - Show/Hide Menu</div>
+      <!--<div>Fear red bird: <input type="checkbox" id="fear-red"></div>-->
+    </div>
+  </body>
+</html>
