@@ -25,7 +25,6 @@ function orientedAngle(l, r) {
   var x1 = Math.cos(l), y1 = Math.sin(l);
   var x2 = Math.cos(r), y2 = Math.sin(r);
   var orientation = Math.sign(x2*y1 + x1*y2);
-  console.log(orientation);
   var a = Math.acos(x1*x2 + y1*y2);
   return a * orientation;
 }
@@ -137,6 +136,10 @@ function mouseMove(e) {
   mouseY = e.offsetY * 2;
 }
 
+function mouseUp(e) {
+  document.getElementById('about').style.visibility = "hidden";
+}
+
 function redraw() {
   var canvas = document.getElementById("swarm-canvas");
   var ctx = canvas.getContext("2d");
@@ -211,7 +214,9 @@ function init() {
   canvas.style.width = window.innerWidth;
   canvas.style.height = window.innerHeight;
 
-  for (var i = 0; i < 240; i++)
+  var numBirds = Math.round(240 / (1440 * 812) * window.innerWidth * window.innerHeight);
+  console.log(numBirds,window.innerWidth,window.innerHeight);
+  for (var i = 0; i < numBirds; i++)
     entities.push(new Entity(Math.random() * canvas.width, Math.random() * canvas.height));
 
   entities[0].accel = function() {
@@ -220,6 +225,7 @@ function init() {
   }
 
   canvas.addEventListener("mousemove", mouseMove);
+  addEventListener("mouseup", mouseUp);
   addEventListener("keypress", keyPress);
   setInterval(update, 1000 / 60.0);
 }
