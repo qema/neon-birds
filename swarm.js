@@ -71,10 +71,14 @@ function Entity(x, y) {
     //this.ar = Math.log(closestDist / 10 + 0.000001) * 1;
     //console.log(closestDist / 100 + 0.000001);
 
+    // fear (repulsion of mouse-controlled bird)
+    var fearDR = 100 * dist(this.x, this.y, entities[0].x, entities[0].y) < 40 ? 10 : 0;
+    var fearDT = -angle(Math.atan2(entities[0].y - this.y, entities[0].x - this.x), this.t);
+
     this.at = AF*alignmentDT + CF*cohesionDT +
-      RF*repulsionDT;
+      RF*repulsionDT + RF*fearDT;
     this.ar = AF*alignmentDR + CF*cohesionDR +
-      RF*repulsionDR;
+      RF*repulsionDR + RF*fearDT;
     //if (this.ar < 0) {
     //  this.ar *= 100;
     //  this.at *= -1;
@@ -143,7 +147,7 @@ function updateUI() {
 
   // checkboxes
   followRed = document.getElementById("follow-red").checked;
-  //fearRed = document.getElementById("fear-red").checked;
+  fearRed = document.getElementById("fear-red").checked;
 }
 
 function update() {
