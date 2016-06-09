@@ -15,7 +15,8 @@ h1 {
 #swarm-canvas {
     margin: 0;
     padding: 0;
-    
+
+    /* no smoothing */
     image-rendering: optimizeSpeed;         /* Older versions of FF          */
     image-rendering: -moz-crisp-edges;      /* FF 6.0+                       */
     image-rendering: -webkit-optimize-contrast; /* Safari                    */
@@ -43,7 +44,7 @@ h1 {
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.8);
     padding: 0.5em;
-    max-width: 30%;
+    max-width: 36%;
 }
 li {
     text-align: left;
@@ -52,9 +53,9 @@ input {
     vertical-align: middle;
 }
 a {
-    color: hsl(180,20%,50%);;
+    color: hsl(180, 50%, 50%);
     text-decoration: none;
 }
-#about-link {
-    color: hsl(180,70%,50%);
+a:hover {
+    color: hsl(180, 75%, 75%);
 }
