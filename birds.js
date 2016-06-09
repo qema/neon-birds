@@ -122,7 +122,7 @@ function Entity(x, y) {
     //console.log(closestDist / 100 + 0.000001);
 
     // fear (repulsion of mouse-controlled bird)
-    var fearDR = dist(this.x, this.y, entities[0].x, entities[0].y) < 300 ? 40 : 0;
+    var fearDR = dist(this.x, this.y, entities[0].x, entities[0].y) < 300 * scale ? 40 : 0;
     var posa = Math.atan2(entities[0].y - this.y, entities[0].x - this.x);
     desiredVT = orientedAngle(this.t, posa);
     var fearDT = -(desiredVT - this.vt) * 0.3;
@@ -145,11 +145,11 @@ function Entity(x, y) {
     //this.ar = (fearRed && fearDR > 0) ? fearDR :
     //  (AF*alignmentDR + CF*cohesionDR + RF*repulsionDR);
     
-    //this.debugVec = {"x": this.ar * Math.cos(this.t + this.at),
-    //		     "y": this.ar * Math.sin(this.t + this.at)}
+    this.debugVec = {"x": this.ar * 4 * Math.cos(this.t + this.at),
+    		     "y": this.ar * 4 * Math.sin(this.t + this.at)}
       
-    this.debugVec = {"x": 30 * Math.cos(this.t + this.at),
-    		     "y": 30 * Math.sin(this.t + this.at)}
+    //this.debugVec = {"x": 30 * Math.cos(this.t + this.at),
+    //		     "y": 30 * Math.sin(this.t + this.at)}
     
     //if (this.ar < 0) {
     //  this.ar *= 100;
