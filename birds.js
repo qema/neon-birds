@@ -74,6 +74,7 @@ function Entity(x, y) {
   this.vr = 0;
   this.vt = 0;
 
+  //////this.biasDir = Math.random() * 0.1 - 0.05;
   this.avoidDir = Math.PI / 4;
 
   this.accel = function() {
@@ -94,7 +95,8 @@ function Entity(x, y) {
     avgHeading = Math.atan2(y, x);// /= closest.length;
     avgVelR /= closest.length;
     var alignmentDR = (avgVelR - this.vr) + Math.random() * 0.1;
-    var alignmentDT = orientedAngle(this.t, avgHeading) * 0.1;
+    var desiredVT = orientedAngle(this.t, avgHeading);
+    var alignmentDT = (desiredVT - this.vt) * 0.15;
 
     // cohesion
     var cx = 0, cy = 0;
@@ -107,24 +109,28 @@ function Entity(x, y) {
 
     //var li = loopoverInfo(this.x, this.y, cx, cy);
     var cohesionDR = Math.sqrt(dist(this.x, this.y, cx, cy));
-    var cohesionDT = orientedAngle(this.t, Math.atan2(cy - this.y, cx - this.x)) * 0.1;
+    desiredVT = orientedAngle(this.t, Math.atan2(cy - this.y, cx - this.x));
+    var cohesionDT = (desiredVT - this.vt) * 0.1;
     //if (li.loopover) cohesionDT -= Math.PI * Math.sign(cohesionDT);
 
     // repulsion
-    var repulsionDR = dist(this.x, this.y, closest[0].x, closest[0].y) < (40 * scale * RF) ? 10 : 0;
-    var a = orientedAngle(this.t, Math.atan2(closest[0].y - this.y, closest[0].x - this.x));
-    var repulsionDT = (repulsionDR == 0 && Math.abs(a) < this.avoidDir) ? 0 : Math.abs(Math.abs(a) - this.avoidDir) * (a > 0 ? -0.1 : 0.1);
+    var repulsionDR = dist(this.x, this.y, closest[0].x, closest[0].y) < (80 * scale * RF * RF) ? 10 : 0;
+    desiredVT = orientedAngle(this.t, Math.atan2(closest[0].y - this.y, closest[0].x - this.x) + this.avoidDir);
+    var repulsionDT = (desiredVT - this.vt) * 0.1;
+    //var repulsionDT = (repulsionDR == 0 && Math.abs(a) < this.avoidDir) ? 0 : Math.abs(Math.abs(a) - this.avoidDir) * (a > 0 ? -0.1 : 0.1);
     //this.ar = Math.log(closestDist / 10 + 0.000001) * 1;
     //console.log(closestDist / 100 + 0.000001);
 
     // fear (repulsion of mouse-controlled bird)
-    var fearDR = dist(this.x, this.y, entities[0].x, entities[0].y) < 200 ? 40 : 0;
+    var fearDR = dist(this.x, this.y, entities[0].x, entities[0].y) < 300 ? 40 : 0;
     var posa = Math.atan2(entities[0].y - this.y, entities[0].x - this.x);
-    var da = orientedAngle(this.t, posa);
-    var fearDT = da > 0 ? -0.3 : 0.3;
-    if (Math.abs(da) > Math.PI / 2) fearDT *= -1;
+    desiredVT = orientedAngle(this.t, posa);
+    var fearDT = -(desiredVT - this.vt) * 0.3;
+    if (Math.abs(desiredVT) > Math.PI / 2) fearDT *= -1;
     if (this.vr < 0) fearDT *= -1;
-    //(fearDR > 0) ? (da > 0 ? -0.1 : 0.1) : 0;
+    //var fearDT = da > 0 ? -0.3 : 0.3;
+    //if (Math.abs(da) > Math.PI / 2) fearDT *= -1;
+    //if (this.vr < 0) fearDT *= -1;
 
     if (fearWhite && fearDR) { 
       this.at = fearDT; this.ar = fearDR;
@@ -297,7 +303,7 @@ function init() {
   for (var i = 0; i < numBirds; i++)
     addNewEntity();
 
-  entities[0].maxVel = 5 * scale;
+  entities[0].maxVel = 8 * scale;
   entities[0].accel = function() {
     this.ar = 0.1;
     this.at = angle(this.t, Math.atan2(mouseY - this.y, mouseX - this.x));
